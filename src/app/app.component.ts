@@ -11,6 +11,7 @@ import { PostService } from './posts.service';
 export class AppComponent implements OnInit {
   loadedPosts :Posts[]= [];
   isFetching = false;
+  error=null;
 
 constructor(private postService:PostService) {}
 
@@ -19,8 +20,10 @@ constructor(private postService:PostService) {}
     this.postService.fetchPosts().subscribe(posts => {
       this.isFetching =false;
       this.loadedPosts = posts;
-    }); // to get data when page loads
-  }
+    }, error=>{
+      this.error = error.statusText; 
+    });  // error handling
+  }// to get data when page loads
 
   onCreatePost(postData: Posts) {
     // Send Http request
@@ -33,6 +36,8 @@ constructor(private postService:PostService) {}
     this.postService.fetchPosts().subscribe(posts => {
       this.isFetching =false;
       this.loadedPosts = posts;
+    }, error=>{
+      this.error = error.statusText;
     });
   }
 
