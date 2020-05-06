@@ -1,10 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Posts } from "./posts.model";
-import { map } from "rxjs/operators";
+import { map, catchError } from "rxjs/operators";
+import { Subject, throwError } from 'rxjs';
 
 @Injectable({ providedIn: "root" })
 export class PostService {
+  error =  new Subject<String>();
+
   constructor(private http: HttpClient) {}
 
   sentAndStorePosts(title: string, content: string) {
@@ -17,6 +20,8 @@ export class PostService {
       .subscribe(responseData => {
         console.log(responseData);
         window.alert("Post Sent");
+      }, error=>{
+        this.error.next(error.statusText);
       });
   }
   fetchPosts() {
@@ -35,7 +40,11 @@ export class PostService {
             }
           }
           return postsArray;
-        }) // above code will transform js object into array with our key-values entered & encrypted firebase key
+        }), // above code will transform js object into array with our key-values entered & encrypted firebase key
+        catchError(errorRes=>{
+         return throwError(errorRes);
+
+        })
       );
   }
 
