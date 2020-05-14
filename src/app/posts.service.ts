@@ -48,7 +48,8 @@ export class PostService {
           headers: new HttpHeaders({ "custom-header": "hello" }), //set headers
           // params : new HttpParams().set('print','pretty')
           //add queryparams or append directly to url bt not good approach when there are mulyiple query params
-          params: searchParams
+          params: searchParams,
+          responseType : 'json' //also takes value "text" if you want to response in text format, but in this case app will break
         }
       ) // <sets type>
       .pipe(
